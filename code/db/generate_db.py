@@ -39,7 +39,6 @@ CREATE TABLE IF NOT EXISTS Champions (
     idChampion SERIAL PRIMARY KEY,
     nomChampion VARCHAR(100) NOT NULL UNIQUE,
     title VARCHAR(150),
-    blurb TEXT,
     attack INT,
     defense INT,
     magic INT,
@@ -77,7 +76,6 @@ CREATE TABLE IF NOT EXISTS Champion_Roles (
     for champ_key, champ in champions.items():
         nom = sql_escape(champ['name'])
         title = sql_escape(champ['title'])
-        blurb = sql_escape(champ['blurb'])
         stats = champ['info']
         attack = stats.get('attack', 0)
         defense = stats.get('defense', 0)
@@ -94,7 +92,8 @@ CREATE TABLE IF NOT EXISTS Champion_Roles (
 
         # Insert champion avec idType
         type_sql = str(champ_type) if champ_type else "NULL"
-        f.write(f"INSERT INTO Champions (idChampion, nomChampion, title, blurb, attack, defense, magic, difficulty, idType) VALUES ({champion_id}, '{nom}', '{title}', '{blurb}', {attack}, {defense}, {magic}, {difficulty}, {type_sql});\n")
+        f.write(f"INSERT INTO Champions (idChampion, nomChampion, title, attack, defense, magic, difficulty, idType) VALUES ({champion_id}, '{nom}', '{title}', {attack}, {defense}, {magic}, {difficulty}, {type_sql});\n")
+
 
         # Insertion des rôles : on va utiliser aussi les tags mais attribuer par défaut des rôles logiques
         # Un mapping simple basé sur tags, à affiner selon besoin
