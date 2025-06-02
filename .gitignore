@@ -1,0 +1,19 @@
+# Cache Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Environnement virtuel
+.venv/
+env/
+venv/
+
+# Fichiers de config
+.env
+*.db
+*.log
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
