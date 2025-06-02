@@ -2,16 +2,16 @@ import requests
 
 # Version patch LoL à jour
 version = "13.10.1"
-url = f"https://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion.json"
+url = f"https://ddragon.leagueoflegends.com/cdn/{version}/data/fr_FR/champion.json"
 
 response = requests.get(url)
 data = response.json()
 champions = data['data']
 
 # Types possibles (à adapter en fonction des données)
-types_list = ['Tank', 'Mage', 'Fighter', 'Assassin', 'Marksman', 'Support']
+types_list = ['Tank', 'Mage', 'Combattant', 'Assassin', 'Tireur', 'Support']
 # Rôles possibles
-roles_list = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
+roles_list = ['Toplane', 'Jungle', 'Midlane', 'ADC/Botlane', 'Support']
 
 # On crée des dictionnaires id pour types et rôles
 types_dict = {t: i+1 for i, t in enumerate(types_list)}
@@ -21,7 +21,7 @@ roles_dict = {r: i+1 for i, r in enumerate(roles_list)}
 def sql_escape(s):
     return s.replace("'", "''")
 
-with open("insert_champions_complet.sql", "w", encoding="utf-8") as f:
+with open("create_db.sql", "w", encoding="utf-8") as f:
 
     # Création tables Types, Roles, Champions, Champion_Roles
     f.write("""
@@ -126,4 +126,4 @@ CREATE TABLE IF NOT EXISTS Champion_Roles (
 
         champion_id += 1
 
-print("Fichier 'insert_champions_complet.sql' généré, prêt à être importé !")
+print("Fichier 'create_db.sql' généré, prêt à être importé !")
