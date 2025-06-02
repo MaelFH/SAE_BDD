@@ -19,16 +19,32 @@ def create_tables():
             """)
         conn.commit()
 
-def insert_stats(stats, period):
-    with connect_db() as conn:
-        with conn.cursor() as cur:
-            for champ_id, data in stats.items():
-                cur.execute("""
-                    INSERT INTO champion_stats (champion_id, period, picks, wins, bans)
-                    VALUES (%s, %s, %s, %s, %s)
-                    ON CONFLICT (champion_id, period) DO UPDATE
-                    SET picks = EXCLUDED.picks,
-                        wins = EXCLUDED.wins,
-                        bans = EXCLUDED.bans;
-                """, (champ_id, period, data["picks"], data["wins"], data["bans"]))
-        conn.commit()
+def insert_match_data(cursor, match_detail, period_name):
+    """
+    Insère les stats des champions extraites d’un match dans la BDD.
+    
+    Args:
+        cursor : curseur PostgreSQL
+        match_detail : dict JSON retourné par Riot API pour un match
+        period_name : string pour identifier la période (ex: '2023-2024')
+    """
+    participants = match_detail["info"]["participants"]
+
+    for p in participants:
+        champ_id = p["championId"]
+        champ_name = p["championName"]
+        win = p["win"]
+        pick = 1
+        ban = 0  # Le match détail ne donne pas directement le ban, à gérer autrement
+
+        # Exemple simple d'upsert : si le champion et période existe, on met à jour les compteurs
+        cursor.execute("""
+            INSERT INTO champion_stats (champion_id, champion_name, period, pick_count, win_count, ban_count)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON CONFLICT (champion_id, period) DO UPDATE SET
+                pick_count = champion_stats.pick_count + EXCLUDED.pick_count,
+                win_count = champion_stats.win_count + EXCLUDED.win_count,
+                ban_count = champion_stats.ban_count + EXCLUDED.ban_count;
+        """, (champ_id, champ_name, period_name, pick, 1 if win else 0, ban))
+
+
