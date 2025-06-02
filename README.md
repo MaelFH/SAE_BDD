@@ -1,5 +1,2 @@
 # SAE_BDD 
-Etudiant 1 : Journee Gabriel 
-Eutdiant 2 : Floc'h Maël 
-Etudiant 3 : Lafhaj Ethan
-Etudiant 4 : Quillot Alexis 
+SAÉ réalisé par : Lafhaj "O-RA-CL-E" Ethan, Journée "RIZKI756" Gabriel, Quillot "Haruko" Alexis et Floc'h "MaelFH" Maël
