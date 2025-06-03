@@ -1,0 +1,24 @@
+-- Création des tables
+
+CREATE TABLE champion (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+); 
+
+
+CREATE TABLE period (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE stats (
+    id SERIAL PRIMARY KEY,
+    champion_id INT NOT NULL,
+    period_id INT NOT NULL,
+    pickrate FLOAT NOT NULL,
+    winrate FLOAT NOT NULL,
+    banrate FLOAT NOT NULL,
+    FOREIGN KEY (champion_id) REFERENCES champion(id),
+    FOREIGN KEY (period_id) REFERENCES period(id)
+);
