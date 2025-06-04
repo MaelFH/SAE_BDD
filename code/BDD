@@ -95,4 +95,5 @@ SELECT
   s.banrate
 FROM stats s
 JOIN champion c ON s.champion_id = c.id
-JOIN period   p ON s.period_id   = p.id;
+JOIN period   p ON s.period_id   = p.id
+ORDER BY p.id, c.name;
