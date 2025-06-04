@@ -59,19 +59,21 @@ def plot_pickrate(period_name):
     df_period = df_stats[df_stats['period'] == period_name]
     df_sorted = df_period.sort_values(by='pickrate', ascending=False)
 
-    spaced_champions = df_sorted['champion']
-
-    plt.figure(figsize=(12, 18))  # Further increased height for more spacing
-    bars = plt.barh(df_sorted['champion'], df_sorted['pickrate'], color='skyblue', height=0.3)  # Further reduced bar height for spacing
+    plt.figure(figsize=(12, 18))  # Grande hauteur = + d'espacement
+    bars = plt.barh(df_sorted['champion'], df_sorted['pickrate'], color='skyblue', height=0.3)
+    
     plt.xlabel('Pickrate (%)')
     plt.title(f'Pickrate per Champion for Period {period_name}')
-    plt.gca().invert_yaxis()  # Highest pickrate on top
+    plt.gca().invert_yaxis()
 
-    # Set y-axis tick labels without spacing between letters
-    plt.yticks(ticks=range(len(spaced_champions)), labels=spaced_champions)
+    # ✅ Espacer les noms et les rendre lisibles
+    plt.tick_params(axis='y', labelsize=9)
+    plt.subplots_adjust(left=0.3)
+    plt.grid(axis='x', linestyle='--', alpha=0.4)
 
     plt.tight_layout()
     plt.show()
+
 
 def plot_winrate_comparison():
     """
@@ -80,50 +82,54 @@ def plot_winrate_comparison():
     df_pivot = df_stats.pivot(index='champion', columns='period', values='winrate')
     df_pivot = df_pivot.sort_values(by='2024-2025', ascending=False)
 
-    # Plotting side-by-side bars with better readability
     labels = df_pivot.index
-    x = range(len(labels))
-    width = 0.35
+    x = np.arange(len(labels))
+    width = 0.4
 
-    fig, ax = plt.subplots(figsize=(16, 10))
-    ax.bar(x, df_pivot['2023-2024'], width, label='2023-2024', color='lightcoral')
-    ax.bar([i + width for i in x], df_pivot['2024-2025'], width, label='2024-2025', color='steelblue')
+    fig, ax = plt.subplots(figsize=(14, 20))  # Hauteur augmentée
+    ax.barh(x - width/2, df_pivot['2023-2024'], height=width, label='2023-2024', color='lightcoral')
+    ax.barh(x + width/2, df_pivot['2024-2025'], height=width, label='2024-2025', color='steelblue')
 
-    ax.set_ylabel('Winrate (%)')
-    ax.set_title('Winrate Comparison per Champion: 2023-2024 vs 2024-2025')
-    ax.set_xticks([i + width / 2 for i in x])
-    ax.set_xticklabels(labels, rotation=90)
+    ax.set_xlabel('Winrate (%)')
+    ax.set_title('Winrate Comparison per Champion: 2023–2024 vs 2024–2025')
+    ax.set_yticks(x)
+    ax.set_yticklabels(labels, fontsize=9)
+    ax.invert_yaxis()
+    ax.grid(axis='x', linestyle='--', alpha=0.4)
     ax.legend()
 
+    plt.subplots_adjust(left=0.3)
     plt.tight_layout()
     plt.show()
 
+
 def plot_banrate(period_name):
     """
-    Plot banrate per champion for the given period with a very visual style.
+    Plot banrate per champion for the given period with visual spacing and value labels.
     """
     df_period = df_stats[df_stats['period'] == period_name]
     df_sorted = df_period.sort_values(by='banrate', ascending=False)
 
-    spaced_champions = df_sorted['champion']
-
-    plt.figure(figsize=(14, 18))  # Further increased height for more spacing
-    bars = plt.barh(df_sorted['champion'], df_sorted['banrate'], color='tomato', edgecolor='black', height=0.3)  # Further reduced bar height for spacing
+    plt.figure(figsize=(12, 18))  # Hauteur suffisante
+    bars = plt.barh(df_sorted['champion'], df_sorted['banrate'], color='tomato', edgecolor='black', height=0.3)
     plt.xlabel('Banrate (%)')
     plt.title(f'Banrate per Champion for Period {period_name}')
-    plt.gca().invert_yaxis()  # Highest banrate on top
+    plt.gca().invert_yaxis()
 
-    # Set y-axis tick labels without spacing between letters
-    plt.yticks(ticks=range(len(spaced_champions)), labels=spaced_champions)
+    # Espacement et lisibilité
+    plt.tick_params(axis='y', labelsize=9)
+    plt.subplots_adjust(left=0.3)
+    plt.grid(axis='x', linestyle='--', alpha=0.4)
 
-    # Add value labels on bars
+    # Ajouter les valeurs à droite des barres
     for bar in bars:
         width = bar.get_width()
-        plt.text(width + 0.3, bar.get_y() + bar.get_height()/2,
+        plt.text(width + 0.3, bar.get_y() + bar.get_height() / 2,
                  f'{width:.1f}%', va='center', fontsize=9, fontweight='bold', color='black')
 
     plt.tight_layout()
     plt.show()
+
 
 if __name__ == "__main__":
     # Plot pickrate for 2023-2024 as requested by user
